@@ -1,76 +1,51 @@
-var alphabet = ["a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z"];
-
-var wins = 0;
-var losses = 0;
-var left = 9;
-var guesses = 9;
-var guessesSoFar = [];
-var psychicLetter;
-
-var newLetter = function () {
-    psychicLetter = alphabet[math.floor(Math.random() * alphabet.length)];
-};
-
-var soFar = function () {
-    document.getElementById("guesses").innerHTML = "Guesses so far: " + guessesSoFar.join(",");
-};
-
-var guessesLeft = function () {
-    document.getElementById("left").innterHTML = "Guesses left: " + left;
+var wins = document.getElementById("wins");
+var losses = document.getElementById("losses");
+var guessesRemaining = document.getElementById("guessesRemaining");
+var guessesSoFar = document.getElementById("guessesSoFar");
+var allLetters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+var winsCount = 0;
+var lossesCount = 0;
+var defaultGuessesRemaining = 9;
+var guessesRemainingCount = defaultGuessesRemaining;
+var guessesArray = [];
+var getRandomLetter = function () {
+    randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)]
+    console.log(randomLetter);
+    return randomLetter
 }
-
-var newGame = function () {
-    guessedLetters = [];
-    left = 9;
-    newLetter();
-    guessesLeft();
-    soFar();
+var displayStats = function () {
+    wins.innerHTML = "Wins: " + winsCount
+    losses.innerHTML = "Losses: " + lossesCount
+    guessesRemaining.innerHTML = "Guesses Left: " + guessesRemainingCount
+    guessesSoFar.innerHTML = "Your Guesses So Far: " + guessesArray
 }
-
-document.onkeyup = function(event) {
-    var userGuess = event.key;
-    left--;
-    guessesSoFar.push(userGuess);
-    soFar();
-    guessesLeft();
-    if (left > 0) {
-        if (userGuess == psychicLetter){
-            wins++;
-            document.getElementById("wins").innerHTML= "Wins:" + wins;
-        newGame();
-        }
-    } else if (left == 0) {
-        losses++;
-        document.getElementById("losses").innterHTML= "Losses:" + losses;
-        newGame();
+var resetGame = function () {
+    guessesArray = [];
+    guessesRemainingCount = defaultGuessesRemaining;
+    currentLetter = getRandomLetter();
+}
+var userWon = function (userLetter) {
+    return userLetter === currentLetter
+}
+var userLost = function () {
+    return guessesRemainingCount === 0;
+}
+var currentLetter = getRandomLetter();
+displayStats();
+document.onkeyup = function (event) {
+    var userLetter = event.key;
+    guessesRemainingCount--
+    guessesArray.push(userLetter)
+    if (userWon(userLetter)) {
+        winsCount++;
+        resetGame();
     }
-
-};
+    if (userLost()) {
+        lossesCount++;
+        resetGame();
+    }
+    displayStats();
+}
 
 
 
