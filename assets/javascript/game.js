@@ -44,7 +44,33 @@ var guessesLeft = function () {
     document.getElementById("left").innterHTML = "Guesses left: " + left;
 }
 
+var newGame = function () {
+    guessedLetters = [];
+    left = 9;
+    newLetter();
+    guessesLeft();
+    soFar();
+}
 
+document.onkeyup = function(event) {
+    var userGuess = event.key;
+    left--;
+    guessesSoFar.push(userGuess);
+    soFar();
+    guessesLeft();
+    if (left > 0) {
+        if (userGuess == psychicLetter){
+            wins++;
+            document.getElementById("wins").innerHTML= "Wins:" + wins;
+        newGame();
+        }
+    } else if (left == 0) {
+        losses++;
+        document.getElementById("losses").innterHTML= "Losses:" + losses;
+        newGame();
+    }
+
+};
 
 
 
